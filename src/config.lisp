@@ -20,7 +20,11 @@
 (defparameter *template-directory* (merge-pathnames #P"templates/" *application-root*))
 
 (defconfig :common
-  `(:databases ((:maindb :sqlite3 :database-name ":memory:"))))
+    `(:databases ((:maindb
+		   :postgres
+		   :database-name "lisp"
+		   :username "lisp_site"
+		   :password "list of world"))))
 
 (defconfig |development|
   '())

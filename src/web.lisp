@@ -30,10 +30,49 @@
 (lambda ()
   (render #P"pidor.html"))
 
-@route GET "/pidor2"
-(lambda (&key |name|)
-  (format t "Something as ~A~%" |name|)
+
+
+@route GET "/test"
+(lambda (&key |type|)
+  (cond
+    ((string= |type| "createTable")
+     (with-connection (db)
+       (execute
+	(sql-compile
+	 (create-table :admin
+	     ((name :type 'text
+		    :primary-key t)
+					;(password :type 'string
+					;:not-null t)
+					;(type :type 'int ;0 content manager; 1 superadmin
+					;	   :not-null nil
+					;	   :default 0)
+	      ))))))
+    ((string= |type| "selectAll")
+     (format nil "~A~%" (cadr (with-connection (db)
+			  (retrieve-one
+			   (select :*
+			     (from :admin)))))))
+    ((string= |type| "drop")
+     (with-connection (db) (drop-table :admin :if-exists t)))
+    ((string= |type| "insert")
+     (with-connection (db)
+       (execute
+	(insert-into :admin
+		      (set= :name "Антон")))))
+    (t (format nil "type is ~A~%" |type|))
+     )
+  )
+
+@route GET "/admin*"
+(defun check-session ()
+  ())
+
+@route GET "/admin/"
+(lambda ()
   (render #P"pidor.html"))
+
+
 
 
 ;;
