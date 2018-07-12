@@ -24,7 +24,7 @@
 ;; Routing rules
 
 (defroute "/" ()
-  (render #P"index.html"))
+  (render #P"index.html" '(:user "test")))
 
 @route GET "/pidor/"
 (lambda ()
